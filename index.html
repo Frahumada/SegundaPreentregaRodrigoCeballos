@@ -13,52 +13,43 @@
     <link rel="stylesheet" href="./styles.css" />
     <title>Impresiones</title>
   </head>
-  <body class="container-fluid">
-    <div class="container d-flex flex-column mx-auto my-5 bg-light">
-      <div class="logo mx-auto mb-5">
-        <img src="" alt="logotipo" />
+  <body class="container d-flex p-0">
+    <div class="container d-flex flex-column mx-auto my-5 bg-light p-0">
+      <div class="logo mx-auto my-2">
+        <img src="./img/logo.webp" alt="logotipo" width="200px" />
       </div>
       <div class="titulo mx-auto">
         <h1>Cotizacion impresiones</h1>
       </div>
-      <div class="tiposImpresiones d-flex m-auto">
-        <a
-          id="Libro"
-          class="btn btn-outline-secondary mx-3 p-5"
-          role="button"
-          onclick="isSelected('Libro')"
-          >Libro</a
+      <div
+        class="tiposImpresiones d-flex flex-wrap justify-content-between px-5"
+      >
+        <button id="libro" class="btn btn-light px-5" onclick="isSelected(id)">
+          Libro
+        </button>
+        <button
+          id="tarjeta"
+          class="btn btn-light px-5"
+          onclick="isSelected(id)"
         >
-        <a
-          id="Tarjeta"
-          class="btn btn-outline-secondary mx-3 p-5"
-          role="button"
-          onclick="isSelected('Tarjeta')"
-          >Tarjeta</a
+          Tarjeta
+        </button>
+        <button
+          id="calendarios"
+          class="btn btn-light px-5"
+          onclick="isSelected(id)"
         >
-        <a
-          id="Calendarios"
-          class="btn btn-outline-secondary mx-3 p-5"
-          role="button"
-          onclick="isSelected('Calendarios')"
-          >Calendarios</a
+          Calendarios
+        </button>
+        <button
+          id="candyBar"
+          class="btn btn-light px-5"
+          onclick="isSelected(id)"
         >
-        <a
-          id="CandyBar"
-          class="btn btn-outline-secondary mx-3 p-5"
-          role="button"
-          onclick="isSelected('CandyBar')"
-          >Candy Bar</a
-        >
+          CandyBar
+        </button>
       </div>
-      <div class="cotizacion">
-        <a
-          class="btn btn-outline-dark mx-3 p-5 "
-          role="button"
-          onclick="mostrar()"
-          >MOSTRAR</a
-        >      
-      </div>
+      <div id="cotizar" class="container d-flex justify-content-center"></div>
     </div>
   </body>
   <script
