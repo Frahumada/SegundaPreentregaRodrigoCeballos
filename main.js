@@ -4,8 +4,41 @@ const costoTapasColor = 5500;
 const costoTapastransp = 5500;
 const costoTintaNegra = 6;
 const costoTintaColor = 10;
-let costoAnillos = 9999999;
 let costoHoja = costoResma / 500;
+
+//POSIBLE CAMBIO PARA ENTREGA FINAL
+// class Anillo {
+//   constructor(anillo) {
+//     this.id = anillo.id;
+//     this.milimetros = anillo.milimetros;
+//     this.capacidad = anillo.capacidad;
+//     this.unidades = anillo.unidades;
+//     this.precio = anillo.precio;
+//   }
+//   precioUnidad() {
+//     return (this.precio/this.unidades);
+//   }
+// }
+
+const costoAnillos = [
+  { id: 1, mm: 7, capacidad: 25, unidades: 50, precio_costo: 1766.6 },
+  { id: 2, mm: 9, capacidad: 50, unidades: 50, precio_costo: 1943.26 },
+  { id: 3, mm: 12, capacidad: 70, unidades: 50, precio_costo: 2918.52 },
+  { id: 4, mm: 14, capacidad: 85, unidades: 50, precio_costo: 3656.62 },
+  { id: 5, mm: 17, capacidad: 100, unidades: 50, precio_costo: 4823.06 },
+  { id: 6, mm: 20, capacidad: 120, unidades: 50, precio_costo: 5608.35 },
+  { id: 7, mm: 23, capacidad: 140, unidades: 20, precio_costo: 2944.0 },
+  { id: 8, mm: 25, capacidad: 160, unidades: 20, precio_costo: 3310.0 },
+  { id: 9, mm: 29, capacidad: 180, unidades: 20, precio_costo: 4359.63 },
+  { id: 10, mm: 33, capacidad: 250, unidades: 20, precio_costo: 4840.0 },
+  { id: 11, mm: 40, capacidad: 350, unidades: 12, precio_costo: 4607.68 },
+  { id: 12, mm: 45, capacidad: 400, unidades: 9, precio_costo: 4059.55 },
+  { id: 13, mm: 50, capacidad: 450, unidades: 9, precio_costo: 4360.0 },
+];
+
+//variables de costos en storage
+localStorage.setItem("costoAnillos", JSON.stringify(costoAnillos));
+console.log(localStorage.getItem("costoAnillos"));
 
 //obtengo todos los productos de la "botonera" y los alojo en la variable productos
 const productos = document.querySelectorAll(".tiposImpresiones button");
@@ -25,30 +58,8 @@ function isSelected(id) {
       producto.classList.add("btn-dark", "selected");
     }
   }
+}
 
-}
-// Funcion para calcular el precio del anillo de acuerdo a la cantidad de paginas
-function costoAnillo(paginas) {
-  //12mm -- 70 hojas
-  //14mm -- 85 hojas
-  //17mm -- 100 hojas
-  //20mm -- 120 hojas
-  if (paginas/2 <= 70) {
-    return 2700;
-  }
-  else if (paginas/2 <= 85) {
-    return 3500;
-  }
-  else if (paginas/2 <= 100) {
-    return 4800;
-  }
-  else if (paginas/2 <= 120) {
-    return 5400;
-  }
-  else {
-    return 99999999999;
-  }
-}
 
 
 // Funcion calcular precio Libro
@@ -59,31 +70,57 @@ function calcularLibro() {
   let color = document.querySelector("#colorImpresion").checked;
   let costoLibro = 1;
 
-  costoAnillos = costoAnillo(paginas);
-  
+  console.log("PAGINAS: " + paginas);
+
+  let costoAnillos = costoAnillo(paginas);
+
   let costoAnillado = (costoAnillos + costoTapasColor + costoTapastransp) / 50;
 
-
   //Calcular costo del libro
-  if (color) {
-    costoLibro = (paginas / 2) * (costoHoja + costoTintaColor) + costoAnillado;
-  } else {
-    costoLibro = (paginas / 2) * (costoHoja + costoTintaNegra) + costoAnillado;
-  }
+  color ? costoLibro = (paginas / 2) * (costoHoja + costoTintaColor) + costoAnillado : costoLibro = (paginas / 2) * (costoHoja + costoTintaNegra) + costoAnillado
+  
 
   //calcular precio del libro
   precioLibro = costoLibro * 2;
 
   //Ajustar precio del libro segun su tamaño (formato A5 o A4)
-  if (tamaño === "true") {
-    precioLibro = precioLibro / 1.85;
-  }
+  tamaño === "true" ? precioLibro = precioLibro / 1.85 : precioLibro = precioLibro
+  
 
   //Obtener div donde mostrar resultado
-  let resultado =document.getElementById("collapseResultado");
-  resultado.innerHTML = "<p>Costo Libro: $"+costoLibro+"</p>"+"<br>"+"<p>Costo hoja: $"+costoHoja+"</p>"+"<br>"+"<p>Costo Anillado: $"+costoAnillado+"</p>"+"<br>"+"<p>Precio final libro $"+Math.floor(precioLibro)+" </p>"
+  let resultado = document.getElementById("collapseResultado");
+  resultado.innerHTML =
+    "<p>Costo Libro: $" +
+    costoLibro +
+    "</p>" +
+    "<br>" +
+    "<p>Costo hoja: $" +
+    costoHoja +
+    "</p>" +
+    "<br>" +
+    "<p>Costo Anillado: $" +
+    costoAnillado +
+    "</p>" +
+    "<br>" +
+    "<p>Precio final libro $" +
+    Math.floor(precioLibro) +
+    " </p>";
   return Math.round(precioLibro);
 }
+
+// Funcion para calcular el precio del anillo de acuerdo a la cantidad de paginas
+function costoAnillo(paginas) {
+  //recupero el array de costos de anillos de la LS
+  anillos = JSON.parse(localStorage.getItem("costoAnillos"));
+  //Recorro el array
+  for (let i = 0; i < anillos.length - 1; i++) {
+    //Si la cantidad de paginas se encuentra entre uno elemento del arreglo y el siguiente inmediato, devuelvo el costo del anillo de mas capacidad
+    if (anillos[i].capacidad < paginas && paginas <= anillos[i + 1].capacidad) {
+      return anillos[i + 1].precio_costo;
+    }
+  }
+}
+
 
 document.addEventListener("DOMContentLoaded", function () {
   //obtengo el div donde va a mostrarse la cotizacion de acuerdo al producto cliqueado
